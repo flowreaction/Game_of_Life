@@ -28,7 +28,7 @@ void glider(char board[22][78]);
 void myFormation(char board[22][78]);
 void gliderGun(char board[22][78]);
 
-void nextGen(char board[22][78], char board_next[22][78], char board_before[22][78], int generation);
+void nextGen(char board[22][78], char board_next[22][78]);
 int neighborCounter(char board[22][78], int i, int j);
 void boardcpy(char board_source[22][78], char board_destination[22][78]);
 void boardclr(char board[22][78]);
@@ -47,6 +47,7 @@ int main(void) {
 		int check = 0;
 		int generation = 1;
 		int speed = 1;
+		int success = 0;
 
 		do {
 			printf("1 - Blinker\n");
@@ -90,20 +91,26 @@ int main(void) {
 		boardcpy(board_now, board_before);
 		while (!_kbhit())
 		{
-			printf("%i. Generation:\n\n", generation);
-			nextGen(board_now, board_next, board_before, generation);
-			boardcpy(board_now, board_before);
+			printf("%i. Generation:\n\n", generation++);
+			nextGen(board_now, board_next);
 			boardcpy(board_next, board_now);
 			boardclr(board_next);
 			printBoard(board_now);
 			Sleep(speed);
-			generation++;
 			system("cls");
 		}
 		flashStandardInput();
-		printf("Game stopped...\n start over? (y/n): ");
-		scanf("%1[YNyn]", again);
-	} while (again == "y" || again == "Y");
+		do
+		{
+			printf("Game stopped...\n start over? (y/n): ");
+			success = scanf("%1[YNyn]", again);
+			flashStandardInput();
+			if (success != 1)
+				printf("only Y or N is accepted input");
+		} while (success != 1);
+		
+	} while (!strcmp(again, "y") || !strcmp(again, "Y"));
+	
 	
 	return 0;
 }
@@ -245,7 +252,7 @@ void gliderGun(char board[22][78]) {
 	board[13][26] = 'X';
 }
 
-void nextGen(char board[22][78], char board_next[22][78], char board_before[22][78], int generation){
+void nextGen(char board[22][78], char board_next[22][78]){
 	for (int i = 0; i < 22; i++)
 	{
 		for (int j = 0; j < 78; j++)
@@ -255,14 +262,6 @@ void nextGen(char board[22][78], char board_next[22][78], char board_before[22][
 				if (neighborCounter(board, i, j) == 3 || neighborCounter(board, i, j) == 2)
 					board_next[i][j] = 'X';
 			}
-			/*else if (generation > 1 && board[i][j] == 0 && board_before[i][j] == 'X' )	
-			{
-				if (neighborCounter(board, i, j) == 3 )
-				{
-					board_next[i][j] = 'X';
-				}
-			} 
-			*/
 			else if (board[i][j] == 0)
 			{
 				if (neighborCounter(board, i, j) == 3)
