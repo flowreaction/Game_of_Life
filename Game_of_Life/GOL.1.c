@@ -14,6 +14,7 @@ Kurzbeschreibung:
 #include <Windows.h>
 #include <conio.h>
 
+
 /******************functionsprototypes**********************/
 void flashStandardInput(void);
 void newline(void);
