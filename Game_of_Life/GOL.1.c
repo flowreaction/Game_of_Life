@@ -27,7 +27,6 @@ void beacon(char board[22][78]);
 void glider(char board[22][78]);
 void myFormation(char board[22][78]);
 void gliderGun(char board[22][78]);
-void gliderGunAndEater(char board[22][78]);
 
 void nextGen(char board[22][78], char board_next[22][78], char board_before[22][78], int generation);
 int neighborCounter(char board[22][78], int i, int j);
@@ -38,67 +37,73 @@ void boardclr(char board[22][78]);
 
 /******************Main function********************/
 int main(void) {
-	char board_now[22][78] = { 0 };
-	char board_next[22][78] = { 0 };
-	char board_before[22][78] = { 0 };
-	double input = 0;
-	int check = 0;
-	int generation = 1;
-	int speed = 1;
-	
-	do {
-		printf("1 - Blinker\n");
-		printf("2 - Block\n");
-		printf("3 - Beehive\n");
-		printf("4 - Beacon\n");
-		printf("5 - Glider\n");
-		printf("6 - my own formation\n");
-		printf("7 - Glider Gun\n");
-		printf("8 - Glider Gun2\n");
-
-		printf("Choose your starting formation: ");
-		check = scanf("%lf", &input);
-		flashStandardInput();
-		newline();
-	} while (check == 0 || input < 1 || input > 8 || input != (int)input); //sichere Abfrage
-	switch ((int)input){
-	case 1: blinker(board_now);
-		break;
-	case 2: block(board_now);
-		break;
-	case 3: beehive(board_now);
-		break;
-	case 4: beacon(board_now);
-		break;
-	case 5: glider(board_now);
-		break;
-	case 6: myFormation(board_now);
-		break;
-	case 7: gliderGun(board_now);
-		break;
-	case 8: gliderGunAndEater(board_now);
-		break;
-	}
-	system("cls");
-	printf("This is your starting formation...\n");
-	printBoard(board_now);
-	printf("\nLet's begin\n\n");
-	printf("How much time do you want each generation to have?\n(in miliseconds)\n");
-	scanf("%d", &speed);
-	boardcpy(board_now, board_before);
-	while (!_kbhit())
+	char again[10] = { 0 };
+	do
 	{
-		printf("%i. Generation:\n\n", generation);
-		nextGen(board_now, board_next, board_before, generation);
-		boardcpy(board_now, board_before);
-		boardcpy(board_next, board_now);
-		boardclr(board_next);
-		printBoard(board_now);
-		Sleep(speed);
-		generation++;
+		char board_now[22][78] = { 0 };
+		char board_next[22][78] = { 0 };
+		char board_before[22][78] = { 0 };
+		double input = 0;
+		int check = 0;
+		int generation = 1;
+		int speed = 1;
+
+		do {
+			printf("1 - Blinker\n");
+			printf("2 - Block\n");
+			printf("3 - Beehive\n");
+			printf("4 - Beacon\n");
+			printf("5 - Glider\n");
+			printf("6 - my own formation\n");
+			printf("7 - Glider Gun\n");
+
+			printf("Choose your starting formation: ");
+			check = scanf("%lf", &input);
+			flashStandardInput();
+			newline();
+		} while (check == 0 || input < 1 || input > 7 || input != (int)input); //sichere Abfrage
+		switch ((int)input) {
+		case 1: blinker(board_now);
+			break;
+		case 2: block(board_now);
+			break;
+		case 3: beehive(board_now);
+			break;
+		case 4: beacon(board_now);
+			break;
+		case 5: glider(board_now);
+			break;
+		case 6: myFormation(board_now);
+			break;
+		case 7: gliderGun(board_now);
+			break;
+		default:
+			break;
+		}
 		system("cls");
-	}
-	
+		printf("This is your starting formation...\n");
+		printBoard(board_now);
+		printf("\nLet's begin\n\n");
+		printf("How much time do you want each generation to have?\n(in miliseconds)\n");
+		scanf("%d", &speed);
+		flashStandardInput();
+		boardcpy(board_now, board_before);
+		while (!_kbhit())
+		{
+			printf("%i. Generation:\n\n", generation);
+			nextGen(board_now, board_next, board_before, generation);
+			boardcpy(board_now, board_before);
+			boardcpy(board_next, board_now);
+			boardclr(board_next);
+			printBoard(board_now);
+			Sleep(speed);
+			generation++;
+			system("cls");
+		}
+		flashStandardInput();
+		printf("Game stopped...\n start over? (y/n): ");
+		scanf("%1[YNyn]", again);
+	} while (again == "y" || again == "Y");
 	
 	return 0;
 }
@@ -195,8 +200,8 @@ void gliderGun(char board[22][78]) {
 	board[7][17] = 'X';
 	board[7][26] = 'X';
 	
-	board[8][0] = 'X';
 	board[8][1] = 'X';
+	board[8][2] = 'X';
 	board[8][12] = 'X';
 	board[8][16] = 'X';
 	board[8][17] = 'X';
@@ -206,8 +211,8 @@ void gliderGun(char board[22][78]) {
 	board[8][26] = 'X';
 	board[8][31] = 'X';
 
-	board[9][0] = 'X';
 	board[9][1] = 'X';
+	board[9][2] = 'X';
 	board[9][12] = 'X';
 	board[9][16] = 'X';
 	board[9][17] = 'X';
@@ -240,83 +245,6 @@ void gliderGun(char board[22][78]) {
 	board[13][26] = 'X';
 }
 
-void gliderGunAndEater(char board[22][78]) {
-
-	/*		gun		*/	
-	board[5][25] = 'X';
-
-	board[6][23] = 'X';
-	board[6][25] = 'X';
-
-	board[7][14] = 'X';
-	board[7][15] = 'X';
-	board[7][21] = 'X';
-	board[7][22] = 'X';
-	board[7][35] = 'X';
-	board[7][36] = 'X';
-
-	board[8][13] = 'X';
-	board[8][17] = 'X';
-	board[8][21] = 'X';
-	board[8][22] = 'X';
-	board[8][35] = 'X';
-	board[8][36] = 'X';
-
-	board[9][12] = 'X';
-	board[9][18] = 'X';
-	board[9][21] = 'X';
-	board[9][22] = 'X';
-	board[9][2] = 'X';
-	board[9][3] = 'X';
-
-	board[10][12] = 'X';
-	board[10][18] = 'X';
-	board[10][16] = 'X';
-	board[10][19] = 'X';
-	board[10][23] = 'X';
-	board[10][25] = 'X';
-	board[10][2] = 'X';
-	board[10][3] = 'X';
-
-	board[11][12] = 'X';
-	board[11][18] = 'X';
-	board[11][25] = 'X';
-
-	board[12][13] = 'X';
-	board[12][17] = 'X';
-
-	board[13][14] = 'X';
-	board[13][15] = 'X';
-
-
-	/*		Eater			
-	board[12][24] = 'X';
-	board[12][25] = 'X';
-	board[12][31] = 'X';
-
-	board[10][13] = 'X';
-	board[10][15] = 'X';
-	board[10][22] = 'X';
-	board[10][25] = 'X';
-	board[10][35] = 'X';
-	board[10][36] = 'X';
-
-	board[11][14] = 'X';
-	board[11][22] = 'X';
-	board[11][23] = 'X';
-	board[11][24] = 'X';
-	board[11][25] = 'X';
-	board[11][35] = 'X';
-	board[11][36] = 'X';
-
-	board[12][23] = 'X';
-	board[12][24] = 'X';
-	board[12][25] = 'X';
-	board[12][26] = 'X';
-
-	board[13][26] = 'X';*/	
-}
-
 void nextGen(char board[22][78], char board_next[22][78], char board_before[22][78], int generation){
 	for (int i = 0; i < 22; i++)
 	{
@@ -327,20 +255,21 @@ void nextGen(char board[22][78], char board_next[22][78], char board_before[22][
 				if (neighborCounter(board, i, j) == 3 || neighborCounter(board, i, j) == 2)
 					board_next[i][j] = 'X';
 			}
-			else if (generation > 1 && board[i][j] == 0 && board_before[i][j] == 'X' )	
+			/*else if (generation > 1 && board[i][j] == 0 && board_before[i][j] == 'X' )	
 			{
 				if (neighborCounter(board, i, j) == 3 )
 				{
 					board_next[i][j] = 'X';
 				}
 			} 
-			/*else if (board[i][j] == 0)
+			*/
+			else if (board[i][j] == 0)
 			{
 				if (neighborCounter(board, i, j) == 3)
 				{
 					board_next[i][j] = 'X';
 				}
-			}*/
+			}
 		}
 	}
 }
