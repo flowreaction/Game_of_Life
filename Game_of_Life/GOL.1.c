@@ -3,9 +3,14 @@ Aufgabe		Game of Life
 Autor		Florian Bopp
 Datum		1.5.18
 
-Kurzbeschreibung:	
+Kurzbeschreibung:	This program simulates the famous "Game Of Life" by Conway,
+					it lets you choose a starting formation or lets you create your own
+					formation.
+					You decide how much time one generation lives and you can see the 
+					screen current generation on top of the console window.
 */
 #define _CRT_SECURE_NO_WARNINGS
+#define CELL 88							//Define the character representing a cell.
 
 #include <stdio.h>
 #include <math.h>
@@ -21,6 +26,7 @@ void newline(void);
 
 void printBoard(char board[22][78]);
 
+//formations
 void blinker(char board[22][78]);
 void block(char board[22][78]);
 void beehive(char board[22][78]);
@@ -29,6 +35,7 @@ void glider(char board[22][78]);
 void myFormation(char board[22][78]);
 void gliderGun(char board[22][78]);
 
+//functions for creting the next generation
 void nextGen(char board[22][78], char board_next[22][78]);
 int neighborCounter(char board[22][78], int i, int j);
 void boardcpy(char board_source[22][78], char board_destination[22][78]);
@@ -41,9 +48,8 @@ int main(void) {
 	char again[10] = { 0 };
 	do
 	{
-		char board_now[22][78] = { 0 };
+		char board_now[22][78] = { 0 };		//two boards are needed so that changes dont affect the current board
 		char board_next[22][78] = { 0 };
-		char board_before[22][78] = { 0 };
 		double input = 0;
 		int check = 0;
 		int generation = 1;
@@ -64,7 +70,7 @@ int main(void) {
 			flashStandardInput();
 			newline();
 		} while (check == 0 || input < 1 || input > 7 || input != (int)input); //sichere Abfrage
-		switch ((int)input) {
+		switch ((int)input) {	//switchcase for coppying the starting formation to the board
 		case 1: blinker(board_now);
 			break;
 		case 2: block(board_now);
@@ -89,14 +95,13 @@ int main(void) {
 		printf("How much time do you want each generation to have?\n(in miliseconds)\n");
 		scanf("%d", &speed);
 		flashStandardInput();
-		boardcpy(board_now, board_before);
 		while (!_kbhit())
 		{
 			printf("%i. Generation:\n\n", generation++);
-			nextGen(board_now, board_next);
-			boardcpy(board_next, board_now);
-			boardclr(board_next);
-			printBoard(board_now);
+			nextGen(board_now, board_next);		//function to create the nextgen is called
+			boardcpy(board_next, board_now);	//the nextgeneration board gets copied to the now board
+			boardclr(board_next);				//the nextgeneration board gets cleared
+			printBoard(board_now);				
 			Sleep(speed);
 			system("cls");
 		}
@@ -134,42 +139,42 @@ void printBoard(char board[22][78]) {
 }
 
 void blinker(char board[22][78]) {
-	board[11][38] = 'X';
-	board[11][39] = 'X';
-	board[11][40] = 'X';
+	board[11][38] = CELL;
+	board[11][39] = CELL;
+	board[11][40] = CELL;
 }
 
 void block(char board[22][78]) {
-	board[11][38] = 'X';
-	board[11][39] = 'X';
-	board[12][38] = 'X';
-	board[12][39] = 'X';
+	board[11][38] = CELL;
+	board[11][39] = CELL;
+	board[12][38] = CELL;
+	board[12][39] = CELL;
 }
 
 void beehive(char board[22][78]) {
-	board[11][39] = 'X';
-	board[12][38] = 'X';
-	board[12][40] = 'X';
-	board[13][38] = 'X';
-	board[13][40] = 'X';
-	board[14][39] = 'X';
+	board[11][39] = CELL;
+	board[12][38] = CELL;
+	board[12][40] = CELL;
+	board[13][38] = CELL;
+	board[13][40] = CELL;
+	board[14][39] = CELL;
 }
 
 void beacon(char board[22][78]) {
-	board[11][39] = 'X';
-	board[11][40] = 'X';
-	board[12][40] = 'X';
-	board[13][37] = 'X';
-	board[14][37] = 'X';
-	board[14][38] = 'X';
+	board[11][39] = CELL;
+	board[11][40] = CELL;
+	board[12][40] = CELL;
+	board[13][37] = CELL;
+	board[14][37] = CELL;
+	board[14][38] = CELL;
 }
 
 void glider(char board[22][78]) {
-	board[11][39] = 'X';
-	board[11][40] = 'X';
-	board[12][38] = 'X';
-	board[12][40] = 'X';
-	board[13][40] = 'X';
+	board[11][39] = CELL;
+	board[11][40] = CELL;
+	board[12][38] = CELL;
+	board[12][40] = CELL;
+	board[13][40] = CELL;
 }
 
 void myFormation(char board[22][78]) {
@@ -189,7 +194,7 @@ void myFormation(char board[22][78]) {
 		} while (xCoord	< 1 || xCoord > 78 || yCoord < 1 || yCoord > 22);
 		if (xCoord == 0)
 			break;
-		board[yCoord-1][xCoord-1] = 'X';
+		board[yCoord-1][xCoord-1] = CELL;
 		system("cls");
 		printf("Ok...  so far the board looks like this:\n");
 		printBoard(board);
@@ -198,59 +203,59 @@ void myFormation(char board[22][78]) {
 }
 
 void gliderGun(char board[22][78]) {
-	board[5][14] = 'X';
+	board[5][14] = CELL;
 
-	board[6][13] = 'X';
-	board[6][15] = 'X';
+	board[6][13] = CELL;
+	board[6][15] = CELL;
 	
-	board[7][12] = 'X';
-	board[7][16] = 'X';
-	board[7][17] = 'X';
-	board[7][26] = 'X';
+	board[7][12] = CELL;
+	board[7][16] = CELL;
+	board[7][17] = CELL;
+	board[7][26] = CELL;
 	
-	board[8][1] = 'X';
-	board[8][2] = 'X';
-	board[8][12] = 'X';
-	board[8][16] = 'X';
-	board[8][17] = 'X';
-	board[8][23] = 'X';
-	board[8][24] = 'X';
-	board[8][25] = 'X';
-	board[8][26] = 'X';
-	board[8][31] = 'X';
+	board[8][1] = CELL;
+	board[8][2] = CELL;
+	board[8][12] = CELL;
+	board[8][16] = CELL;
+	board[8][17] = CELL;
+	board[8][23] = CELL;
+	board[8][24] = CELL;
+	board[8][25] = CELL;
+	board[8][26] = CELL;
+	board[8][31] = CELL;
 
-	board[9][1] = 'X';
-	board[9][2] = 'X';
-	board[9][12] = 'X';
-	board[9][16] = 'X';
-	board[9][17] = 'X';
-	board[9][22] = 'X';
-	board[9][23] = 'X';
-	board[9][24] = 'X';
-	board[9][25] = 'X';
-	board[9][31] = 'X';
+	board[9][1] = CELL;
+	board[9][2] = CELL;
+	board[9][12] = CELL;
+	board[9][16] = CELL;
+	board[9][17] = CELL;
+	board[9][22] = CELL;
+	board[9][23] = CELL;
+	board[9][24] = CELL;
+	board[9][25] = CELL;
+	board[9][31] = CELL;
 
-	board[10][13] = 'X';
-	board[10][15] = 'X';
-	board[10][22] = 'X';
-	board[10][25] = 'X';
-	board[10][35] = 'X';
-	board[10][36] = 'X';
+	board[10][13] = CELL;
+	board[10][15] = CELL;
+	board[10][22] = CELL;
+	board[10][25] = CELL;
+	board[10][35] = CELL;
+	board[10][36] = CELL;
 
-	board[11][14] = 'X';
-	board[11][22] = 'X';
-	board[11][23] = 'X';
-	board[11][24] = 'X';
-	board[11][25] = 'X';
-	board[11][35] = 'X';
-	board[11][36] = 'X';
+	board[11][14] = CELL;
+	board[11][22] = CELL;
+	board[11][23] = CELL;
+	board[11][24] = CELL;
+	board[11][25] = CELL;
+	board[11][35] = CELL;
+	board[11][36] = CELL;
 
-	board[12][23] = 'X';
-	board[12][24] = 'X';
-	board[12][25] = 'X';
-	board[12][26] = 'X';
+	board[12][23] = CELL;
+	board[12][24] = CELL;
+	board[12][25] = CELL;
+	board[12][26] = CELL;
 
-	board[13][26] = 'X';
+	board[13][26] = CELL;
 }
 
 void nextGen(char board[22][78], char board_next[22][78]){
@@ -258,53 +263,53 @@ void nextGen(char board[22][78], char board_next[22][78]){
 	{
 		for (int j = 0; j < 78; j++)
 		{
-			if (board[i][j] == 'X')	
+			if (board[i][j] == CELL)	//if the current cell is alive check for number of alive neighbors and fill the next generation board acordingly
 			{
 				if (neighborCounter(board, i, j) == 3 || neighborCounter(board, i, j) == 2)
-					board_next[i][j] = 'X';
+					board_next[i][j] = CELL;
 			}
-			else if (board[i][j] == 0)
+			else if (board[i][j] == 0) //if the current cell is dead, check for number of alive neighbors and fill the next generation board acordingly
 			{
 				if (neighborCounter(board, i, j) == 3)
 				{
-					board_next[i][j] = 'X';
+					board_next[i][j] = CELL;
 				}
 			}
 		}
 	}
 }
 
-int neighborCounter(char board[22][78], int i, int j) {
+int neighborCounter(char board[22][78], int i, int j) {				//checks all direct neighbors of the current cell and returns the number of alive neighbors
 	int neighbors = 0;
-	if (board[i - 1][j - 1] == 'X' && i-1 >= 0 && j-1 >= 0 )
+	if (board[i - 1][j - 1] == CELL && i-1 >= 0 && j-1 >= 0 )		//conditions to check neighbors and to check for walls of the board
 	{
 		neighbors++;
 	}
-	if (board[i - 1][j] == 'X' && i - 1 >= 0)
+	if (board[i - 1][j] == CELL && i - 1 >= 0)
 	{
 		neighbors++;
 	}
-	if (board[i - 1][j + 1] == 'X' && i - 1 >= 0 && j + 1 < 78)
+	if (board[i - 1][j + 1] == CELL && i - 1 >= 0 && j + 1 < 78)
 	{
 		neighbors++;
 	}
-	if (board[i][j - 1] == 'X' && j - 1 >= 0)
+	if (board[i][j - 1] == CELL && j - 1 >= 0)
 	{
 		neighbors++;
 	}
-	if (board[i][j + 1] == 'X' && j + 1 < 78)
+	if (board[i][j + 1] == CELL && j + 1 < 78)
 	{
 		neighbors++;
 	}
-	if (board[i + 1][j - 1] == 'X' && i + 1 < 22 && j - 1 >= 0)
+	if (board[i + 1][j - 1] == CELL && i + 1 < 22 && j - 1 >= 0)
 	{
 		neighbors++;
 	}
-	if (board[i + 1][j] == 'X' && i+1 < 22)
+	if (board[i + 1][j] == CELL && i+1 < 22)
 	{
 		neighbors++;
 	}
-	if (board[i + 1][j + 1] == 'X' && i + 1 <22 && j + 1 < 78)
+	if (board[i + 1][j + 1] == CELL && i + 1 <22 && j + 1 < 78)
 	{
 		neighbors++;
 	}
