@@ -11,6 +11,7 @@ Kurzbeschreibung:	This program simulates the famous "Game Of Life" by Conway,
 */
 #define _CRT_SECURE_NO_WARNINGS
 #define CELL 219							//Define the character representing a cell.
+typedef unsigned char UCHAR;
 
 #include <stdio.h>
 #include <math.h>
@@ -24,29 +25,29 @@ Kurzbeschreibung:	This program simulates the famous "Game Of Life" by Conway,
 void flashStandardInput(void);
 void newline(void);
 
-void printBoard(unsigned char board[22][78]);
+void printBoard(UCHAR board[22][78]);
 
 //formations
-void blinker(unsigned char board[22][78]);
-void block(unsigned char board[22][78]);
-void beehive(unsigned char board[22][78]);
-void beacon(unsigned char board[22][78]);
-void glider(unsigned char board[22][78]);
-void myFormation(unsigned char board[22][78]);
-void gliderGun(unsigned char board[22][78]);
+void blinker(UCHAR board[22][78]);
+void block(UCHAR board[22][78]);
+void beehive(UCHAR board[22][78]);
+void beacon(UCHAR board[22][78]);
+void glider(UCHAR board[22][78]);
+void myFormation(UCHAR board[22][78]);
+void gliderGun(UCHAR board[22][78]);
 
 //functions for creting the next generation
-void nextGen(unsigned char board[22][78], unsigned char board_next[22][78]);
-int neighborCounter(unsigned char board[22][78], int i, int j);
-void boardcpy(unsigned char board_source[22][78], unsigned char board_destination[22][78]);
-void boardclr(unsigned char board[22][78]);
+void nextGen(UCHAR board[22][78], UCHAR board_next[22][78]);
+int neighborCounter(UCHAR board[22][78], int i, int j);
+void boardcpy(UCHAR board_source[22][78], UCHAR board_destination[22][78]);
+void boardclr(UCHAR board[22][78]);
 
 /******************Main function********************/
 int main(void) { 
 	char again[2] = { 0 };
 	do {
-		unsigned char board_now[22][78] = { 0 };		//two boards are needed so that changes dont affect the current board
-		unsigned char board_next[22][78] = { 0 };
+		UCHAR board_now[22][78] = { 0 };		//two boards are needed so that changes dont affect the current board
+		UCHAR board_next[22][78] = { 0 };
 		double input = 0;
 		int check = 0;
 		int generation = 1;
@@ -118,7 +119,7 @@ int main(void) {
 }
 
 /******************Functions*******************/
-void printBoard(unsigned char board[22][78]) {
+void printBoard(UCHAR board[22][78]) {
 	printf("________________________________________________________________________________\n");
 	for (int i = 0; i < 22; i++)
 	{
@@ -134,20 +135,20 @@ void printBoard(unsigned char board[22][78]) {
 
 }
 
-void blinker(unsigned char board[22][78]) {
+void blinker(UCHAR board[22][78]) {
 	board[11][38] = CELL;
 	board[11][39] = CELL;
 	board[11][40] = CELL;
 }
 
-void block(unsigned char board[22][78]) {
+void block(UCHAR board[22][78]) {
 	board[11][38] = CELL;
 	board[11][39] = CELL;
 	board[12][38] = CELL;
 	board[12][39] = CELL;
 }
 
-void beehive(unsigned char board[22][78]) {
+void beehive(UCHAR board[22][78]) {
 	board[11][39] = CELL;
 	board[12][38] = CELL;
 	board[12][40] = CELL;
@@ -156,7 +157,7 @@ void beehive(unsigned char board[22][78]) {
 	board[14][39] = CELL;
 }
 
-void beacon(unsigned char board[22][78]) {
+void beacon(UCHAR board[22][78]) {
 	board[11][39] = CELL;
 	board[11][40] = CELL;
 	board[12][40] = CELL;
@@ -165,7 +166,7 @@ void beacon(unsigned char board[22][78]) {
 	board[14][38] = CELL;
 }
 
-void glider(unsigned char board[22][78]) {
+void glider(UCHAR board[22][78]) {
 	board[11][39] = CELL;
 	board[11][40] = CELL;
 	board[12][38] = CELL;
@@ -173,7 +174,7 @@ void glider(unsigned char board[22][78]) {
 	board[13][40] = CELL;
 }
 
-void myFormation(unsigned char board[22][78]) {
+void myFormation(UCHAR board[22][78]) {
 	int xCoord = 0;
 	int yCoord = 0;
 	printf("In order for you to make your own starting formation, you'll need to specify each coordinate.\nSo please enter the coordinates, and when you are done enter 0\n\n");
@@ -198,7 +199,7 @@ void myFormation(unsigned char board[22][78]) {
 	system("cls");
 }
 
-void gliderGun(unsigned char board[22][78]) {
+void gliderGun(UCHAR board[22][78]) {
 	board[5][14] = CELL;
 
 	board[6][13] = CELL;
@@ -254,7 +255,7 @@ void gliderGun(unsigned char board[22][78]) {
 	board[13][26] = CELL;
 }
 
-void nextGen(unsigned char board[22][78], unsigned char board_next[22][78]){
+void nextGen(UCHAR board[22][78], UCHAR board_next[22][78]){
 	for (int i = 0; i < 22; i++)
 	{
 		for (int j = 0; j < 78; j++)
@@ -275,7 +276,7 @@ void nextGen(unsigned char board[22][78], unsigned char board_next[22][78]){
 	}
 }
 
-int neighborCounter(unsigned char board[22][78], int i, int j) {				//checks all direct neighbors of the current cell and returns the number of alive neighbors
+int neighborCounter(UCHAR board[22][78], int i, int j) {				//checks all direct neighbors of the current cell and returns the number of alive neighbors
 	int neighbors = 0;
 	if (board[i - 1][j - 1] == CELL && i-1 >= 0 && j-1 >= 0 )		//conditions to check neighbors and to check for walls of the board
 	{
@@ -312,7 +313,7 @@ int neighborCounter(unsigned char board[22][78], int i, int j) {				//checks all
 	return neighbors;
 }
 
-void boardcpy(unsigned char board_source[22][78], unsigned char board_destination[22][78]) {
+void boardcpy(UCHAR board_source[22][78], UCHAR board_destination[22][78]) {
 	for (int i = 0; i < 22; i++)
 	{
 		for (int j = 0; j < 78; j++)
@@ -323,7 +324,7 @@ void boardcpy(unsigned char board_source[22][78], unsigned char board_destinatio
 
 }
 
-void boardclr(unsigned char board[22][78]) {
+void boardclr(UCHAR board[22][78]) {
 	for (int i = 0; i < 22; i++)
 	{
 		for (int j = 0; j < 78; j++)
