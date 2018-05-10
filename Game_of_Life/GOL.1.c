@@ -10,7 +10,7 @@ Kurzbeschreibung:	This program simulates the famous "Game Of Life" by Conway,
 					screen current generation on top of the console window.
 */
 #define _CRT_SECURE_NO_WARNINGS
-#define CELL 88							//Define the character representing a cell.
+#define CELL 219							//Define the character representing a cell.
 
 #include <stdio.h>
 #include <math.h>
@@ -24,32 +24,29 @@ Kurzbeschreibung:	This program simulates the famous "Game Of Life" by Conway,
 void flashStandardInput(void);
 void newline(void);
 
-void printBoard(char board[22][78]);
+void printBoard(unsigned char board[22][78]);
 
 //formations
-void blinker(char board[22][78]);
-void block(char board[22][78]);
-void beehive(char board[22][78]);
-void beacon(char board[22][78]);
-void glider(char board[22][78]);
-void myFormation(char board[22][78]);
-void gliderGun(char board[22][78]);
+void blinker(unsigned char board[22][78]);
+void block(unsigned char board[22][78]);
+void beehive(unsigned char board[22][78]);
+void beacon(unsigned char board[22][78]);
+void glider(unsigned char board[22][78]);
+void myFormation(unsigned char board[22][78]);
+void gliderGun(unsigned char board[22][78]);
 
 //functions for creting the next generation
-void nextGen(char board[22][78], char board_next[22][78]);
-int neighborCounter(char board[22][78], int i, int j);
-void boardcpy(char board_source[22][78], char board_destination[22][78]);
-void boardclr(char board[22][78]);
-
-
+void nextGen(unsigned char board[22][78], unsigned char board_next[22][78]);
+int neighborCounter(unsigned char board[22][78], int i, int j);
+void boardcpy(unsigned char board_source[22][78], unsigned char board_destination[22][78]);
+void boardclr(unsigned char board[22][78]);
 
 /******************Main function********************/
-int main(void) {
-	char again[10] = { 0 };
-	do
-	{
-		char board_now[22][78] = { 0 };		//two boards are needed so that changes dont affect the current board
-		char board_next[22][78] = { 0 };
+int main(void) { 
+	char again[2] = { 0 };
+	do {
+		unsigned char board_now[22][78] = { 0 };		//two boards are needed so that changes dont affect the current board
+		unsigned char board_next[22][78] = { 0 };
 		double input = 0;
 		int check = 0;
 		int generation = 1;
@@ -105,10 +102,10 @@ int main(void) {
 			Sleep(speed);
 			system("cls");
 		}
-		flashStandardInput();
 		do
 		{
-			printf("Game stopped...\n start over? (y/n): ");
+			system("cls");
+			printf("Game stopped...\nstart over? (y/n): ");
 			success = scanf("%1[YNyn]", again);
 			flashStandardInput();
 			if (success != 1)
@@ -117,12 +114,11 @@ int main(void) {
 		
 	} while (!strcmp(again, "y") || !strcmp(again, "Y"));
 	
-	
 	return 0;
 }
 
 /******************Functions*******************/
-void printBoard(char board[22][78]) {
+void printBoard(unsigned char board[22][78]) {
 	printf("________________________________________________________________________________\n");
 	for (int i = 0; i < 22; i++)
 	{
@@ -138,20 +134,20 @@ void printBoard(char board[22][78]) {
 
 }
 
-void blinker(char board[22][78]) {
+void blinker(unsigned char board[22][78]) {
 	board[11][38] = CELL;
 	board[11][39] = CELL;
 	board[11][40] = CELL;
 }
 
-void block(char board[22][78]) {
+void block(unsigned char board[22][78]) {
 	board[11][38] = CELL;
 	board[11][39] = CELL;
 	board[12][38] = CELL;
 	board[12][39] = CELL;
 }
 
-void beehive(char board[22][78]) {
+void beehive(unsigned char board[22][78]) {
 	board[11][39] = CELL;
 	board[12][38] = CELL;
 	board[12][40] = CELL;
@@ -160,7 +156,7 @@ void beehive(char board[22][78]) {
 	board[14][39] = CELL;
 }
 
-void beacon(char board[22][78]) {
+void beacon(unsigned char board[22][78]) {
 	board[11][39] = CELL;
 	board[11][40] = CELL;
 	board[12][40] = CELL;
@@ -169,7 +165,7 @@ void beacon(char board[22][78]) {
 	board[14][38] = CELL;
 }
 
-void glider(char board[22][78]) {
+void glider(unsigned char board[22][78]) {
 	board[11][39] = CELL;
 	board[11][40] = CELL;
 	board[12][38] = CELL;
@@ -177,7 +173,7 @@ void glider(char board[22][78]) {
 	board[13][40] = CELL;
 }
 
-void myFormation(char board[22][78]) {
+void myFormation(unsigned char board[22][78]) {
 	int xCoord = 0;
 	int yCoord = 0;
 	printf("In order for you to make your own starting formation, you'll need to specify each coordinate.\nSo please enter the coordinates, and when you are done enter 0\n\n");
@@ -202,7 +198,7 @@ void myFormation(char board[22][78]) {
 	system("cls");
 }
 
-void gliderGun(char board[22][78]) {
+void gliderGun(unsigned char board[22][78]) {
 	board[5][14] = CELL;
 
 	board[6][13] = CELL;
@@ -258,7 +254,7 @@ void gliderGun(char board[22][78]) {
 	board[13][26] = CELL;
 }
 
-void nextGen(char board[22][78], char board_next[22][78]){
+void nextGen(unsigned char board[22][78], unsigned char board_next[22][78]){
 	for (int i = 0; i < 22; i++)
 	{
 		for (int j = 0; j < 78; j++)
@@ -279,7 +275,7 @@ void nextGen(char board[22][78], char board_next[22][78]){
 	}
 }
 
-int neighborCounter(char board[22][78], int i, int j) {				//checks all direct neighbors of the current cell and returns the number of alive neighbors
+int neighborCounter(unsigned char board[22][78], int i, int j) {				//checks all direct neighbors of the current cell and returns the number of alive neighbors
 	int neighbors = 0;
 	if (board[i - 1][j - 1] == CELL && i-1 >= 0 && j-1 >= 0 )		//conditions to check neighbors and to check for walls of the board
 	{
@@ -316,7 +312,7 @@ int neighborCounter(char board[22][78], int i, int j) {				//checks all direct n
 	return neighbors;
 }
 
-void boardcpy(char board_source[22][78], char board_destination[22][78]) {
+void boardcpy(unsigned char board_source[22][78], unsigned char board_destination[22][78]) {
 	for (int i = 0; i < 22; i++)
 	{
 		for (int j = 0; j < 78; j++)
@@ -327,7 +323,7 @@ void boardcpy(char board_source[22][78], char board_destination[22][78]) {
 
 }
 
-void boardclr(char board[22][78]) {
+void boardclr(unsigned char board[22][78]) {
 	for (int i = 0; i < 22; i++)
 	{
 		for (int j = 0; j < 78; j++)
@@ -347,11 +343,3 @@ void newline(void) {
 	printf("\n");
 }
 
-/********************Sichere Abfrage*******************
-do {
-	printf("Bitte Dimension der Matrix eingeben (1, 2 oder 3 Dimensionen): ");
-	check = scanf("%lf", &dimensionen);
-	flashStandardInput();
-	newline();
-} while (check == 0 || dimensionen < 1 || dimensionen > 3 || dimensionen != (int)dimensionen); //sichere Abfrage
-*/
